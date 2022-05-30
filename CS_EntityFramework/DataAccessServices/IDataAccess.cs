@@ -16,7 +16,7 @@ namespace CS_EntityFramework.DataAccessServices
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TPk"></typeparam>
-    public interface IDataAccess<TEntity, in TPk> where TEntity : EntityBase
+    public interface IDataAccess<TEntity, in TPk> where TEntity : class
     {
         IEnumerable<TEntity> Get(); // return Collection
         TEntity Get(TPk id); // Return SIngle Object based on id
