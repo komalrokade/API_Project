@@ -10,23 +10,13 @@ using Core_API.Models.Sevices;
 namespace Core_API.Controllers
 {
    
-    /// <summary>
-    /// Attributes:
-    /// 1. Route: Thiswill be used to register the controller with its action method in RouteTable.
-    /// e.g. api/Department, HttpGet with map with Get() method, HttpPost will map with Post() method, HttpPut () method mapped
-    /// with put and HttpDelete will map with Delete() method.
-    /// Note: Default is always HttpGet.
-    /// </summary>
+    
     [Route("api/[controller]")]
     [ApiController]
     public class DepartmentController : ControllerBase
     {
         private IDBService<Department, int> deptServ;
-        /// <summary>
-        ///Inject the Idvservice in the constructor , this wiill extract and instace of the
-        ///class which impliments idbservice<department, int>
-        /// </summary>
-        /// <param name="serv"></param>
+        
         
         public DepartmentController(IDBService<Department,int> serv)
         {
@@ -49,15 +39,45 @@ namespace Core_API.Controllers
         [HttpPost]
         public IActionResult Post(Department data)
         {
-            var response = deptServ.Create(data);
-            return Ok(response);
+            //try
+            //{
+                //Check for the model validations
+                //if yes accept
+                if(ModelState.IsValid)
+                {
+                    //throw exception based on condition
+                    if (data.Capacity < 0) throw new Exception("Capacity cannot be negative");
+                    var response = deptServ.Create(data);
+                    return Ok(response);
+                }
+            else
+            {
+                //else genrate validation error response
+                return BadRequest(ModelState);
+            }
+            
         }
+        //}
+        //catch(Exception ex)
+        //{
+            //catch the exception and return badrequest response
+            //return BadRequest(ex.Message);
+        //}
 
         [HttpPut]
         public IActionResult Put(int id, Department data)
         {
-            var response = deptServ.Update(id, data);
-            return Ok(response);
+            if(ModelState.IsValid)
+            {
+                var response = deptServ.Update(id, data);
+                return Ok(response);
+            }
+            else
+            {
+                //ele generate validation error response
+                return BadRequest(ModelState);
+            }
+            
         }
 
         [HttpDelete]

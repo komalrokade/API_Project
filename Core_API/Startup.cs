@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Core_API.Models;
 using Core_API.Models.Sevices;
 using Microsoft.EntityFrameworkCore;
+using Core_API.Controllers;
+
 
 namespace Core_API
 {
@@ -49,9 +51,14 @@ namespace Core_API
             //Interface name and the class that iplemetns the interface
 
             services.AddScoped<IDBService<Department, int>, DepartmetDBService>();
+            services.AddScoped<IDBService<Employee, int>, EmployeeDBService>();
 
             //Method that informs the HOST that the current application is for API
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => {
+                    // suppress the CamelCasing fo the JSON Response
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
             //genrate the API documentation
             services.AddSwaggerGen(c =>
             {

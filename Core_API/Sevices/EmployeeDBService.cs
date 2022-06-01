@@ -8,30 +8,59 @@ namespace Core_API.Models.Sevices
 {
     public class EmployeeDBService : IDBService<Employee, int>
     {
-        //private readonly CompanyContext context;
+        private readonly CompanyContext context;
+        public EmployeeDBService(CompanyContext ctx)
+        {
+            context = ctx;
+        }
         public Employee Create(Employee entity)
         {
-            throw new NotImplementedException();
+            context.Employees.Add(entity);
+            context.SaveChanges();
+            return entity;
+
+            //throw new NotImplementedException();
         }
 
         public Employee Delete(int id)
         {
-            throw new NotImplementedException();
+            var empToDelete = context.Employees.Find(id);
+            if (empToDelete == null) return null;
+
+            context.Employees.Remove(empToDelete);
+            context.SaveChanges();
+            return empToDelete;
+            //throw new NotImplementedException();
         }
 
         public IEnumerable<Employee> Get()
         {
-            throw new NotImplementedException();
+            return context.Employees.ToList();
+            //throw new NotImplementedException();
         }
 
         public Employee Get(int id)
         {
-            throw new NotImplementedException();
+            var empToFind = context.Employees.Find(id);
+            return empToFind;
+
+            //throw new NotImplementedException();
         }
 
         public Employee Update(int id, Employee entity)
         {
-            throw new NotImplementedException();
+            var empToUpdate = context.Employees.Find(id);
+            if (empToUpdate == null) return null;
+
+            empToUpdate.EmpNo = entity.EmpNo;
+            empToUpdate.EmpName = entity.EmpName;
+            empToUpdate.Designation = entity.Designation;
+            empToUpdate.Salary = entity.Salary;
+            empToUpdate.DeptNo = entity.DeptNo;
+
+            context.SaveChanges();
+            return empToUpdate;
+            //throw new Not
         }
     }
 }
